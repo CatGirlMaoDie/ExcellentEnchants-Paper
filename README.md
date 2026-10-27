@@ -94,9 +94,37 @@ mvn clean package -Dpaper.api.version=1.21.11-R0.1-SNAPSHOT
 |:--|:--|
 | `nightcore-shim` | The engine sources (configuration, language, command framework, GUI framework, text/particle helpers) previously shipped by the *NightCore* library, bundled and adapted to the native Paper API. |
 | `API` | Public API of the plugin. |
-| `Core` | The plugin implementation; shades the engine into `su.nightexpress.excellentenchants.libs.nightcore`. |
+| `Core` | The plugin implementation; shades the engine into `su.nightexpress.excellentenchants.libs.nightcore` and the Fluxon runtime into `su.nightexpress.excellentenchants.libs.fluxon`. |
 | `tooltip-packetevents` / `tooltip-protocollib` | Optional tooltip providers. |
 | `compat-mythicmobs` | Optional MythicMobs compatibility. |
+
+## Scripting (Fluxon)
+
+Enchantments can be defined and implemented with [Fluxon](https://github.com/TabooLib/fluxon) scripts - no Java code required.
+
+* Scripts live in `plugins/ExcellentEnchants/enchants/*.fs`.
+* A script declares the enchantment metadata (name, max level, weight, item sets, distribution, components) **and** its behaviour through hook functions such as `on-attack(ctx)`, `on-defend(ctx)`, `on-mining(ctx)`, `on-kill(ctx)` and `on-passive(ctx)`.
+* The bundled default enchantments are shipped as scripts and extracted on first startup, so they can be read, copied and modified as templates.
+* Adding a new `.fs` file adds a new enchantment; `/ee reload` hot-reloads script behaviour (metadata changes require a restart).
+
+See [docs/SCRIPTING.md](docs/SCRIPTING.md) for the full reference.
+
+```fluxon
+name = "Venom"
+max-level = 2
+weight = "uncommon"
+supported-items = "SWORDS_AXES"
+primary-items = "SWORD"
+
+trigger-chance = [base: 5, per-level: 5]
+potion-effect = [type: "POISON", duration: [base: 2, per-level: 1, capacity: 10]]
+
+def on-attack(ctx) {
+    if !&ctx.chance() { return false }
+    if !&ctx.effect(&ctx.victim) { return false }
+    true
+}
+```
 
 ## Requirements
 

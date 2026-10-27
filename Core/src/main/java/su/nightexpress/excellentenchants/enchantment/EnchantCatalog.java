@@ -40,29 +40,6 @@ import static su.nightexpress.excellentenchants.enchantment.EnchantCatalog.Weigh
 @NullMarked
 public enum EnchantCatalog implements EnchantCatalogEntry {
 
-    COLD_STEEL(() -> EnchantDefinition.builder("Cold Steel", 3)
-        .description(TRIGGER_CHANCE + "% chance to apply " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " (" +
-            EFFECT_DURATION + "s.) on attacker.")
-        .weight(UNCOMMON)
-        .supportedItems(ItemSetDefaults.CHESTPLATE_ELYTRA)
-        .primaryItems(ItemSetDefaults.CHESTPLATE)
-        .build(), () -> EnchantDistribution.regular(TradeType.SNOW_COMMON), ColdSteelEnchant::new
-    ),
-    DARKNESS_CLOAK(() -> EnchantDefinition.builder("Darkness Cloak", 3)
-        .description(TRIGGER_CHANCE + "% chance to apply " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " (" +
-            EFFECT_DURATION + "s.) on attacker.")
-        .weight(UNCOMMON)
-        .supportedItems(ItemSetDefaults.CHESTPLATE_ELYTRA)
-        .primaryItems(ItemSetDefaults.CHESTPLATE)
-        .build(), () -> EnchantDistribution.regular(TradeType.SAVANNA_COMMON), DarknessCloakEnchant::new
-    ),
-    DRAGON_HEART(() -> EnchantDefinition.builder("Dragon Heart", 5)
-        .description("Grants permanent " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " effect.")
-        .weight(RARE)
-        .supportedItems(ItemSetDefaults.CHESTPLATE_ELYTRA)
-        .primaryItems(ItemSetDefaults.CHESTPLATE)
-        .build(), () -> EnchantDistribution.regular(TradeType.JUNGLE_SPECIAL), DragonHeartEnchant::new
-    ),
     ELEMENTAL_PROTECTION(() -> EnchantDefinition.builder("Elemental Protection", 4)
         .description("Reduces potion and elemental damage by " + GENERIC_AMOUNT + "%.")
         .weight(COMMON)
@@ -83,33 +60,11 @@ public enum EnchantCatalog implements EnchantCatalogEntry {
         .exclusives(EnchantsKeys.FROST_WALKER)
         .build(), () -> EnchantDistribution.treasure(TradeType.DESERT_SPECIAL), FlameWalkerEnchant::new
     ),
-    HARDENED(() -> EnchantDefinition.builder("Hardened", 2)
-        .description(TRIGGER_CHANCE + "% chance to get " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " (" +
-            EFFECT_DURATION + "s.) when damaged.")
-        .weight(UNCOMMON)
-        .supportedItems(ItemSetDefaults.CHESTPLATE_ELYTRA)
-        .primaryItems(ItemSetDefaults.CHESTPLATE)
-        .build(), () -> EnchantDistribution.regular(TradeType.PLAINS_COMMON), HardenedEnchant::new
-    ),
-    ICE_SHIELD(() -> EnchantDefinition.builder("Ice Shield", 3)
-        .description(TRIGGER_CHANCE + "% chance to freeze and apply " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " (" +
-            EFFECT_DURATION + "s.) on attacker.")
-        .weight(COMMON)
-        .supportedItems(ItemSetDefaults.CHESTPLATE_ELYTRA)
-        .primaryItems(ItemSetDefaults.CHESTPLATE)
-        .build(), () -> EnchantDistribution.regular(TradeType.SNOW_COMMON), IceShieldEnchant::new
-    ),
     LIGHTWEIGHT(() -> EnchantDefinition.builder("Lightweight", 1)
         .description("You can safely jump on turtle eggs, farmlands and big dripleaf.")
         .weight(COMMON)
         .items(ItemSetDefaults.BOOTS)
         .build(), () -> EnchantDistribution.regular(TradeType.SNOW_COMMON), LightweightEnchant::new
-    ),
-    JUMPING(() -> EnchantDefinition.builder("Jumping", 2)
-        .description("Grants permanent " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " effect.")
-        .weight(RARE)
-        .items(ItemSetDefaults.BOOTS)
-        .build(), () -> EnchantDistribution.regular(TradeType.PLAINS_COMMON), JumpingEnchant::new
     ),
     KAMIKADZE(() -> EnchantDefinition.builder("Kamikadze", 3)
         .description(TRIGGER_CHANCE + "% chance to explode on death.")
@@ -117,12 +72,6 @@ public enum EnchantCatalog implements EnchantCatalogEntry {
         .supportedItems(ItemSetDefaults.CHESTPLATE_ELYTRA)
         .primaryItems(ItemSetDefaults.CHESTPLATE)
         .build(), () -> EnchantDistribution.regular(TradeType.JUNGLE_COMMON), KamikadzeEnchant::new
-    ),
-    NIGHT_VISION(() -> EnchantDefinition.builder("Night Vision", 1)
-        .description("Grants permanent " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " effect.")
-        .weight(VERY_RARE)
-        .items(ItemSetDefaults.HELMET)
-        .build(), () -> EnchantDistribution.treasure(TradeType.TAIGA_SPECIAL), NightVisionEnchant::new
     ),
     REBOUND(() -> EnchantDefinition.builder("Rebound", 1)
         .description("Effect of landing on a slime block.")
@@ -144,23 +93,11 @@ public enum EnchantCatalog implements EnchantCatalogEntry {
         .items(ItemSetDefaults.HELMET)
         .build(), () -> EnchantDistribution.regular(TradeType.SAVANNA_SPECIAL), SaturationEnchant::new
     ),
-    SPEED(() -> EnchantDefinition.builder("Speed", 2)
-        .description("Grants permanent " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " effect.")
-        .weight(RARE)
-        .items(ItemSetDefaults.BOOTS)
-        .build(), () -> EnchantDistribution.regular(TradeType.DESERT_SPECIAL), SpeedyEnchant::new
-    ),
     STOPPING_FORCE(() -> EnchantDefinition.builder("Stopping Force", 3)
         .description(TRIGGER_CHANCE + "% chance to reduce knockback for " + GENERIC_AMOUNT + "%.")
         .weight(UNCOMMON)
         .items(ItemSetDefaults.LEGGINGS)
         .build(), () -> EnchantDistribution.regular(TradeType.PLAINS_COMMON), StoppingForceEnchant::new
-    ),
-    WATER_BREATHING(() -> EnchantDefinition.builder("Water Breathing", 1)
-        .description("Grants permanent " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " effect.")
-        .weight(VERY_RARE)
-        .items(ItemSetDefaults.HELMET)
-        .build(), () -> EnchantDistribution.treasure(TradeType.PLAINS_SPECIAL), WaterBreathingEnchant::new
     ),
     BOMBER(() -> EnchantDefinition.builder("Bomber", 3)
         .description(TRIGGER_CHANCE + "% chance to shoot a TNT ignited for " + GENERIC_TIME + "s.")
@@ -322,13 +259,6 @@ public enum EnchantCatalog implements EnchantCatalogEntry {
         .primaryItems(ItemSetDefaults.MINING_TOOLS)
         .build(), () -> EnchantDistribution.regular(TradeType.DESERT_COMMON), GlassbreakerEnchant::new
     ),
-    HASTE(() -> EnchantDefinition.builder("Haste", 3)
-        .description("Grants " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " effect when mining blocks.")
-        .weight(RARE)
-        .supportedItems(ItemSetDefaults.TOOL)
-        .primaryItems(ItemSetDefaults.MINING_TOOLS)
-        .build(), () -> EnchantDistribution.regular(TradeType.SAVANNA_COMMON), HasteEnchant::new
-    ),
     LUCKY_MINER(() -> EnchantDefinition.builder("Lucky Miner", 3)
         .description(TRIGGER_CHANCE + "% chance to gain " + GENERIC_AMOUNT + "% more XP from ores.")
         .weight(UNCOMMON)
@@ -438,22 +368,6 @@ public enum EnchantCatalog implements EnchantCatalogEntry {
         .primaryItems(ItemSetDefaults.SWORD)
         .build(), () -> EnchantDistribution.regular(TradeType.PLAINS_COMMON), BaneOfNetherspawnEnchant::new
     ),
-    BLINDNESS(() -> EnchantDefinition.builder("Blindness", 2)
-        .description(TRIGGER_CHANCE + "% chance to apply " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " (" +
-            EFFECT_DURATION + "s.) on hit.")
-        .weight(COMMON)
-        .supportedItems(ItemSetDefaults.SWORDS_AXES)
-        .primaryItems(ItemSetDefaults.SWORD)
-        .build(), () -> EnchantDistribution.regular(TradeType.TAIGA_COMMON), BlindnessEnchant::new
-    ),
-    CONFUSION(() -> EnchantDefinition.builder("Confusion", 2)
-        .description(TRIGGER_CHANCE + "% chance to apply " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " (" +
-            EFFECT_DURATION + "s.) on hit.")
-        .weight(COMMON)
-        .supportedItems(ItemSetDefaults.SWORDS_AXES)
-        .primaryItems(ItemSetDefaults.SWORD)
-        .build(), () -> EnchantDistribution.regular(TradeType.SNOW_COMMON), ConfusionEnchant::new
-    ),
     CURE(() -> EnchantDefinition.builder("Cure", 3)
         .description(TRIGGER_CHANCE + "% chance to cure Zombified Piglins and Zombie Villagers on hit.")
         .weight(COMMON)
@@ -490,22 +404,6 @@ public enum EnchantCatalog implements EnchantCatalogEntry {
         .primaryItems(ItemSetDefaults.SWORD)
         .build(), () -> EnchantDistribution.regular(TradeType.TAIGA_COMMON), DoubleStrikeEnchant::new
     ),
-    EXHAUST(() -> EnchantDefinition.builder("Exhaust", 4)
-        .description(TRIGGER_CHANCE + "% chance to apply " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " (" +
-            EFFECT_DURATION + "s.) on hit.")
-        .weight(COMMON)
-        .supportedItems(ItemSetDefaults.SWORDS_AXES)
-        .primaryItems(ItemSetDefaults.SWORD)
-        .build(), () -> EnchantDistribution.regular(TradeType.PLAINS_COMMON), ExhaustEnchant::new
-    ),
-    ICE_ASPECT(() -> EnchantDefinition.builder("Ice Aspect", 3)
-        .description("Freezes and applies " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " (" + EFFECT_DURATION +
-            "s.) on hit.")
-        .weight(COMMON)
-        .supportedItems(ItemSetDefaults.SWORDS_AXES)
-        .primaryItems(ItemSetDefaults.SWORD)
-        .build(), () -> EnchantDistribution.regular(TradeType.SNOW_COMMON), IceAspectEnchant::new
-    ),
     INFERNUS(() -> EnchantDefinition.builder("Infernus", 3)
         .description("Launched trident will ignite the enemy for " + GENERIC_TIME + "s. on hit.")
         .weight(COMMON)
@@ -518,22 +416,6 @@ public enum EnchantCatalog implements EnchantCatalogEntry {
         .supportedItems(ItemSetDefaults.SWORDS_AXES)
         .primaryItems(ItemSetDefaults.SWORD)
         .build(), () -> EnchantDistribution.regular(TradeType.JUNGLE_COMMON), NimbleEnchant::new
-    ),
-    PARALYZE(() -> EnchantDefinition.builder("Paralyze", 5)
-        .description(TRIGGER_CHANCE + "% chance to apply " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " (" +
-            EFFECT_DURATION + "s.) on hit.")
-        .weight(UNCOMMON)
-        .supportedItems(ItemSetDefaults.SWORDS_AXES)
-        .primaryItems(ItemSetDefaults.SWORD)
-        .build(), () -> EnchantDistribution.regular(TradeType.TAIGA_COMMON), ParalyzeEnchant::new
-    ),
-    RAGE(() -> EnchantDefinition.builder("Rage", 2)
-        .description(TRIGGER_CHANCE + "% chance to get " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " (" +
-            EFFECT_DURATION + "s.) on hit.")
-        .weight(UNCOMMON)
-        .supportedItems(ItemSetDefaults.SWORDS_AXES)
-        .primaryItems(ItemSetDefaults.SWORD)
-        .build(), () -> EnchantDistribution.regular(TradeType.DESERT_COMMON), RageEnchant::new
     ),
     ROCKET(() -> EnchantDefinition.builder("Rocket", 3)
         .description(TRIGGER_CHANCE + "% chance to launch your enemy into the space.")
@@ -577,14 +459,6 @@ public enum EnchantCatalog implements EnchantCatalogEntry {
         .primaryItems(ItemSetDefaults.SWORD)
         .build(), () -> EnchantDistribution.regular(TradeType.SAVANNA_COMMON), VampireEnchant::new
     ),
-    VENOM(() -> EnchantDefinition.builder("Venom", 2)
-        .description(TRIGGER_CHANCE + "% chance to apply " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " (" +
-            EFFECT_DURATION + "s.) on hit.")
-        .weight(COMMON)
-        .supportedItems(ItemSetDefaults.SWORDS_AXES)
-        .primaryItems(ItemSetDefaults.SWORD)
-        .build(), () -> EnchantDistribution.regular(TradeType.SWAMP_COMMON), VenomEnchant::new
-    ),
     VILLAGE_DEFENDER(() -> EnchantDefinition.builder("Village Defender", 5)
         .description("Inflicts " + GENERIC_AMOUNT + "❤ more damage to all pillagers.")
         .weight(COMMON)
@@ -598,14 +472,6 @@ public enum EnchantCatalog implements EnchantCatalogEntry {
         .supportedItems(ItemSetDefaults.SWORDS_AXES)
         .primaryItems(ItemSetDefaults.SWORD)
         .build(), () -> EnchantDistribution.regular(TradeType.DESERT_COMMON), WisdomEnchant::new
-    ),
-    WITHER(() -> EnchantDefinition.builder("Wither", 2)
-        .description(TRIGGER_CHANCE + "% chance to apply " + EFFECT_TYPE + " " + EFFECT_AMPLIFIER + " (" +
-            EFFECT_DURATION + "s.) on hit.")
-        .weight(UNCOMMON)
-        .supportedItems(ItemSetDefaults.SWORDS_AXES)
-        .primaryItems(ItemSetDefaults.SWORD)
-        .build(), () -> EnchantDistribution.regular(TradeType.SNOW_COMMON), WitherEnchant::new
     ),
     ;
 

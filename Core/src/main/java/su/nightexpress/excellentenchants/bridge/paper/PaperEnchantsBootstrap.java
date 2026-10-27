@@ -1,6 +1,8 @@
 package su.nightexpress.excellentenchants.bridge.paper;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -40,6 +42,8 @@ import su.nightexpress.excellentenchants.api.item.ItemSetRegistry;
 import su.nightexpress.excellentenchants.api.wrapper.TradeType;
 import su.nightexpress.excellentenchants.enchantment.DistributionConfig;
 import su.nightexpress.excellentenchants.enchantment.EnchantCatalog;
+import su.nightexpress.excellentenchants.bridge.EnchantCatalogEntry;
+import su.nightexpress.excellentenchants.script.EnchantScripts;
 import su.nightexpress.nightcore.bridge.common.NightKey;
 import su.nightexpress.nightcore.util.Lists;
 
@@ -86,13 +90,22 @@ public class PaperEnchantsBootstrap implements PluginBootstrap {
             // Load defaults and read from the config files Definition and Distribution settings for enchants.
             EnchantCatalog.loadAll(dataDirectory, itemSetRegistry, (entry, exception) -> context.getLogger().error(
                 "Could not load '{}' enchantment: '{}'", entry.getId(), exception.getMessage()));
+
+            // Load Fluxon based enchantment scripts from the 'enchants' directory.
+            EnchantScripts.loadAll(dataDirectory,
+                message -> context.getLogger().info("{}", message),
+                (file, exception) -> context.getLogger().error("Could not load '{}' enchantment script: '{}'",
+                    file, exception.getMessage()));
         }));
 
         // Register a new handler for the freeze lifecycle event on the enchantment registry
         lifecycle.registerEventHandler(RegistryEvents.ENCHANTMENT.compose().newHandler(event -> {
             var registry = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT);
 
-            EnchantCatalog.enabled().forEach(data -> {
+            List<EnchantCatalogEntry> entries = new ArrayList<>(EnchantCatalog.enabled().toList());
+            entries.addAll(EnchantScripts.enabled().toList());
+
+            entries.forEach(data -> {
                 EnchantDefinition definition = data.getDefinition();
                 ItemSet primarySet = definition.getPrimaryItemSet();
                 ItemSet supportedSet = definition.getSupportedItemSet();
@@ -148,7 +161,10 @@ public class PaperEnchantsBootstrap implements PluginBootstrap {
         lifecycle.registerEventHandler(LifecycleEvents.TAGS.preFlatten(RegistryKey.ENCHANTMENT).newHandler(event -> {
             var registrar = event.registrar();
 
-            EnchantCatalog.enabled().forEach(data -> {
+            List<EnchantCatalogEntry> entries = new ArrayList<>(EnchantCatalog.enabled().toList());
+            entries.addAll(EnchantScripts.enabled().toList());
+
+            entries.forEach(data -> {
                 EnchantDistribution distribution = data.getDistribution();
                 TypedKey<Enchantment> key = EnchantmentKeys.create(data.getKey());
 

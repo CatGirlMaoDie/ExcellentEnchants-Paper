@@ -48,6 +48,9 @@ import su.nightexpress.excellentenchants.enchantment.EnchantedItem;
 import su.nightexpress.excellentenchants.manager.block.TickedBlock;
 import su.nightexpress.excellentenchants.manager.damage.Explosion;
 import su.nightexpress.excellentenchants.manager.listener.AnvilListener;
+import su.nightexpress.excellentenchants.script.EnchantScripts;
+import su.nightexpress.excellentenchants.script.ScriptEnchantEntry;
+import su.nightexpress.excellentenchants.script.ScriptEnchantment;
 import su.nightexpress.excellentenchants.manager.listener.EnchantListener;
 import su.nightexpress.excellentenchants.manager.listener.GenericListener;
 import su.nightexpress.excellentenchants.manager.listener.SlotListener;
@@ -123,7 +126,8 @@ public class EnchantManager extends AbstractManager<EnchantsPlugin> {
     }
 
     private void loadEnchants() {
-        EnchantCatalog.enabled().forEach(this::loadEnchant);
+        EnchantCatalog.enabled().filter(catalog -> !EnchantScripts.isScripted(catalog.getId())).forEach(this::loadEnchant);
+        this.loadScriptedEnchants();
         ItemSetDefaults.clearAll(); // Clear default item sets from memory.
 
         this.plugin.info("Loaded " + EnchantRegistry.getRegistered().size() + " enchantments.");
@@ -156,6 +160,39 @@ public class EnchantManager extends AbstractManager<EnchantsPlugin> {
         enchantment.load();
         EnchantRegistry.registerEnchant(enchantment);
         return true;
+    }
+
+    private void loadScriptedEnchants() {
+        int reloaded = EnchantScripts.reloadBehaviour(message -> this.plugin.info(message));
+        if (reloaded > 0) {
+            this.plugin.info("Reloaded " + reloaded + " enchantment script(s).");
+        }
+
+        for (ScriptEnchantEntry entry : EnchantScripts.enabled().toList()) {
+            String id = entry.getId();
+
+            CustomEnchantment registered = EnchantRegistry.getById(id);
+            if (registered != null) {
+                if (registered instanceof ScriptEnchantment scripted) {
+                    scripted.updateScript(entry.getScript());
+                }
+                registered.load();
+                continue;
+            }
+
+            Enchantment bukkitEnchant = BukkitThing.getByKey(RegistryType.ENCHANTMENT, entry.getKey());
+            if (bukkitEnchant == null) {
+                this.plugin.error("No registered bukkit enchant found for scripted '%s'.".formatted(id));
+                continue;
+            }
+
+            EnchantContext context = new EnchantContext(id, bukkitEnchant, entry.getDefinition(), entry
+                .getDistribution(), entry.isCurse());
+            CustomEnchantment enchantment = entry.createEnchantment(this.plugin, this, entry.getFile(), context);
+
+            enchantment.load();
+            EnchantRegistry.registerEnchant(enchantment);
+        }
     }
 
     public void updateCache(LivingEntity entity, EquipmentSlot slot, @Nullable ItemStack itemStack) {
