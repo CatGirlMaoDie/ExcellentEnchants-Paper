@@ -2,6 +2,7 @@ package su.nightexpress.excellentenchants.manager.block;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
 import su.nightexpress.nightcore.util.EntityUtil;
@@ -66,6 +67,11 @@ public class TickedBlock {
 
     public boolean isAlive() {
         return !this.isDead();
+    }
+
+    @NonNull
+    public Location getLocation() {
+        return this.location;
     }
 
     public int getSourceId() {

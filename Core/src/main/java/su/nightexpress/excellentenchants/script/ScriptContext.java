@@ -542,7 +542,8 @@ public final class ScriptContext {
     public void delayVelocity(@Nullable LivingEntity target, double factor) {
         if (target == null) return;
 
-        this.enchantment.getPlugin().runTask(() -> target.setVelocity(target.getVelocity().multiply(factor)));
+        this.enchantment.getPlugin().runTask(target, () -> target.setVelocity(target.getVelocity()
+            .multiply(factor)));
     }
 
     /**
@@ -652,7 +653,7 @@ public final class ScriptContext {
         Material material = Material.matchMaterial(materialName.toUpperCase().replace(' ', '_'));
         if (material == null) return;
 
-        this.enchantment.getPlugin().runTask(() -> block.setType(material));
+        this.enchantment.getPlugin().runTask(block.getLocation(), () -> block.setType(material));
     }
 
     /**
@@ -784,7 +785,7 @@ public final class ScriptContext {
             player, Material.FISHING_ROD);
         if (slot == null) return false;
 
-        this.enchantment.getPlugin().runTask(() -> {
+        this.enchantment.getPlugin().runTask(player, () -> {
             if (fishEvent.isCancelled()) return;
             if (!fishEvent.getHook().isValid()) return;
 

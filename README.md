@@ -134,14 +134,16 @@ def on-attack(ctx) {
 
 | **Server Version** | **Paper** | **Folia** | **Java Version** |
 |:------------------:|:---------:|:---------:|:----------------:|
-|       26.3         |    Yes    |    No     |        25        |
-|       26.2         |    Yes    |    No     |        25        |
-|      26.1.x        |    Yes    |    No     |        25        |
-|      1.21.11       |    Yes    |    No     |        21        |
-|    1.21.9 - 1.21.10|    Yes    |    No     |        21        |
-|      1.21.8        |    Yes    |    No     |        21        |
-|   1.21 - 1.21.7    |    Yes    |    No     |        21        |
+|       26.3         |    Yes    |    Yes    |        25        |
+|       26.2         |    Yes    |    Yes    |        25        |
+|      26.1.x        |    Yes    |    Yes    |        25        |
+|      1.21.11       |    Yes    |    Yes    |        21        |
+|    1.21.9 - 1.21.10|    Yes    |    Yes    |        21        |
+|      1.21.8        |    Yes    |    Yes    |        21        |
+|   1.21 - 1.21.7    |    Yes    |    Yes    |        21        |
 
+- **Folia:** supported. All scheduling goes through the global region, region and entity schedulers
+  (no `BukkitScheduler` usage), so chunk/entity work always runs on the owning region thread.
 - **Older versions (1.20.x and below) are no longer supported.** The plugin will refuse to start on them and disable itself.
 - Versions newer than **26.3** are loaded in "best effort" mode: the plugin enables, but some features may not work properly.
 - Anything not listed in the compatibility table is **NOT** supported.

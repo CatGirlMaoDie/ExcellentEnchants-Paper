@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.inventory.Inventory;
@@ -424,10 +425,10 @@ public class Players {
             CommandSender finalSender = sender;
             String finalCommand = command;
             if (usePlayer) {
-                player.getScheduler().run(null, task -> Bukkit.dispatchCommand(finalSender, finalCommand), null);
+                runAt(player, () -> Bukkit.dispatchCommand(finalSender, finalCommand));
             }
             else {
-                Bukkit.getGlobalRegionScheduler().run(null, task -> Bukkit.dispatchCommand(finalSender, finalCommand));
+                runGlobal(() -> Bukkit.dispatchCommand(finalSender, finalCommand));
             }
         }
         else {
@@ -527,6 +528,34 @@ public class Players {
         }
     }
 
+    /**
+     * Runs the task on the entity's region thread (Folia) or on the main thread (Paper/Spigot).
+     */
+    public static void runAt(@NonNull Entity entity, @NonNull Runnable runnable) {
+        su.nightexpress.nightcore.bridge.scheduler.AdaptedScheduler scheduler = su.nightexpress.nightcore.bridge
+            .scheduler.AdaptedScheduler.instance();
+        if (scheduler != null) {
+            scheduler.runTask(entity, runnable);
+            return;
+        }
+
+        Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("ExcellentEnchants"), runnable);
+    }
+
+    /**
+     * Runs the task on the global (region) thread.
+     */
+    public static void runGlobal(@NonNull Runnable runnable) {
+        su.nightexpress.nightcore.bridge.scheduler.AdaptedScheduler scheduler = su.nightexpress.nightcore.bridge
+            .scheduler.AdaptedScheduler.instance();
+        if (scheduler != null) {
+            scheduler.runTask(runnable);
+            return;
+        }
+
+        Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("ExcellentEnchants"), runnable);
+    }
+
     public static void addItem(@NonNull Player player, @NonNull ItemStack itemStack, int amount) {
         if (amount <= 0 || itemStack.getType().isAir()) return;
 
@@ -538,10 +567,10 @@ public class Players {
         ItemStack copy = split.clone();
         World world = player.getWorld();
         if (Version.isFolia()) {
-            player.getScheduler().run(null, task -> player.getInventory()
+            runAt(player, () -> player.getInventory()
                 .addItem(copy)
                 .values()
-                .forEach(left -> world.dropItem(player.getLocation(), left)), null);
+                .forEach(left -> world.dropItem(player.getLocation(), left)));
         }
         else {
             player.getInventory().addItem(copy).values().forEach(left -> world.dropItem(player.getLocation(), left));

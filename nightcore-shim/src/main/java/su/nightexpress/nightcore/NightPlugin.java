@@ -22,7 +22,8 @@ import org.jspecify.annotations.Nullable;
 import su.nightexpress.nightcore.bridge.chat.UniversalChatEventHandler;
 import su.nightexpress.nightcore.bridge.permission.PermissionNamespace;
 import su.nightexpress.nightcore.bridge.scheduler.AdaptedScheduler;
-import su.nightexpress.nightcore.bridge.scheduler.DefaultBukkitScheduler;
+import su.nightexpress.nightcore.bridge.paper.scheduler.FoliaScheduler;
+import su.nightexpress.nightcore.bridge.paper.scheduler.PaperScheduler;
 import su.nightexpress.nightcore.command.CommandManager;
 import su.nightexpress.nightcore.command.api.NightPluginCommand;
 import su.nightexpress.nightcore.commands.ArgumentRegistry;
@@ -87,7 +88,9 @@ public abstract class NightPlugin extends JavaPlugin implements NightCorePlugin 
 
         long loadTook = System.currentTimeMillis();
 
-        this.scheduler = new DefaultBukkitScheduler(this);
+        // Folia has no BukkitScheduler: use the region/entity based scheduler instead.
+        this.scheduler = Version.isFolia() ? new FoliaScheduler(this) : new PaperScheduler(this);
+        AdaptedScheduler.setInstance(this.scheduler);
 
         if (!this.checkVersion()) {
             this.getPluginManager().disablePlugin(this);

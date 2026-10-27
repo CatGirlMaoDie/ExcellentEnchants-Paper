@@ -246,13 +246,21 @@ public class EnchantManager extends AbstractManager<EnchantsPlugin> {
     private void tickArrowEffects() {
         this.arrowEffects.keySet().removeIf(arrow -> !arrow.isValid() || arrow.isDead());
         this.arrowEffects.forEach((arrow, effects) -> {
-            effects.forEach(particle -> particle.play(arrow.getLocation(), 0f, 0f, 10));
+            // Particles must be spawned on the arrow's region thread (Folia).
+            this.plugin.runTask(arrow, () -> {
+                if (!arrow.isValid() || arrow.isDead()) return;
+
+                effects.forEach(particle -> particle.play(arrow.getLocation(), 0f, 0f, 10));
+            });
         });
     }
 
     private void tickBlocks() {
-        this.tickedBlocks.values().removeIf(tickedBlock -> {
-            tickedBlock.tick();
+        this.tickedBlocks.entrySet().removeIf(entry -> {
+            TickedBlock tickedBlock = entry.getValue();
+
+            // Block state must be changed on the block's region thread (Folia).
+            this.plugin.runTask(entry.getKey(), tickedBlock::tick);
             return tickedBlock.isDead();
         });
     }
@@ -263,10 +271,15 @@ public class EnchantManager extends AbstractManager<EnchantsPlugin> {
 
     private void tickPassiveEnchants() {
         this.getPassiveEnchantEntities().forEach(entity -> {
-            this.handleInSlots(entity, EntityUtil.EQUIPMENT_SLOTS, EnchantRegistry.PASSIVE, (item, enchant,
-                                                                                             level) -> enchant
-                                                                                                 .onTrigger(entity,
-                                                                                                     item, level));
+            // Entity effects must be applied on the entity's region thread (Folia).
+            this.plugin.runTask(entity, () -> {
+                if (entity.isDead()) return;
+
+                this.handleInSlots(entity, EntityUtil.EQUIPMENT_SLOTS, EnchantRegistry.PASSIVE, (item, enchant,
+                                                                                                 level) -> enchant
+                                                                                                     .onTrigger(entity,
+                                                                                                         item, level));
+            });
         });
     }
 
