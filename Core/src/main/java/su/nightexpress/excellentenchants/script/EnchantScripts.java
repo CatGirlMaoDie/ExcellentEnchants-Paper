@@ -178,7 +178,23 @@ public final class EnchantScripts {
         ScriptEnchantment.HOOK_DEFEND,
         ScriptEnchantment.HOOK_MINING,
         ScriptEnchantment.HOOK_KILL,
-        ScriptEnchantment.HOOK_PASSIVE
+        ScriptEnchantment.HOOK_PASSIVE,
+        ScriptEnchantment.HOOK_SHOOT,
+        ScriptEnchantment.HOOK_LAUNCH,
+        ScriptEnchantment.HOOK_HIT,
+        ScriptEnchantment.HOOK_PROJECTILE_DAMAGE,
+        ScriptEnchantment.HOOK_DROP,
+        ScriptEnchantment.HOOK_INTERACT,
+        ScriptEnchantment.HOOK_FISHING,
+        ScriptEnchantment.HOOK_INVENTORY_DEATH,
+        ScriptEnchantment.HOOK_CLICK,
+        ScriptEnchantment.HOOK_ITEM_DAMAGE,
+        ScriptEnchantment.HOOK_PROTECTION,
+        ScriptEnchantment.HOOK_DEATH,
+        ScriptEnchantment.HOOK_RESURRECT,
+        ScriptEnchantment.HOOK_BLOCK_CHANGE,
+        ScriptEnchantment.HOOK_MOVE,
+        ScriptEnchantment.HOOK_PLACE
     );
 
     /**
@@ -187,7 +203,8 @@ public final class EnchantScripts {
     private static final List<String> META_KEYS = List.of(
         "id", "name", "description", "max-level", "weight", "items", "supported-items", "primary-items",
         "exclusive-with", "anvil-cost", "curse", "priority", "treasure", "trades", "discoverable", "tradable",
-        "mob-equipment", "random-loot", "traded-equipment", "trigger-chance", "potion-effect", "period"
+        "mob-equipment", "random-loot", "traded-equipment", "trigger-chance", "potion-effect", "period",
+        "arrow-effects", "charges", "damage-bonus", "place-in-containers"
     );
 
     /**

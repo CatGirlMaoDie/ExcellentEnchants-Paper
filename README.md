@@ -104,7 +104,7 @@ Enchantments can be defined and implemented with [Fluxon](https://github.com/Tab
 
 * Scripts live in `plugins/ExcellentEnchants/enchants/*.fs`.
 * A script declares the enchantment metadata (name, max level, weight, item sets, distribution, components) **and** its behaviour through hook functions such as `on-attack(ctx)`, `on-defend(ctx)`, `on-mining(ctx)`, `on-kill(ctx)` and `on-passive(ctx)`.
-* The bundled default enchantments are shipped as scripts and extracted on first startup, so they can be read, copied and modified as templates.
+* **All 81 default enchantments are shipped as Fluxon scripts** (`Core/src/main/resources/enchants/*.fs`): every metadata entry, distribution, component and behaviour lives in the script files - there are no Java enchantment implementations left. They are extracted on first startup, so they can be read, copied and modified as templates.
 * Adding a new `.fs` file adds a new enchantment; `/ee reload` hot-reloads script behaviour (metadata changes require a restart).
 
 See [docs/SCRIPTING.md](docs/SCRIPTING.md) for the full reference.

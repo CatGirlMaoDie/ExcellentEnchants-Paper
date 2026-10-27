@@ -45,6 +45,10 @@ potion-effect = [type: "POISON",                               // 药水效果�
                  duration: [base: 2, per-level: 1, capacity: 10],
                  amplifier: [base: 0, per-level: 0]]
 period = 5                                                     // 被动触发间隔（秒）
+arrow-effects = "ELECTRIC_SPARK"                               // 箭矢轨迹粒子（可以是字符串或 [particle: "...", color: "r,g,b"]）
+charges = [max: [base: 50], consume: 1, recharge: 1, fuel: "ENDER_PEARL"]   // 充能系统
+damage-bonus = "multiplier"                                    // 伤害减免类型：normal / multiplier
+place-in-containers = false                                    // 是否允许放入容器
 
 // —— 行为（可选，定义了哪个回调就实现哪个）——
 def on-attack(ctx) {
@@ -58,11 +62,27 @@ def on-attack(ctx) {
 
 | 回调 | 触发时机 | 返回值 |
 |:--|:--|:--|
-| `on-attack(ctx)` | 玩家用附魔武器攻击实体 | `true` = 已生效 |
-| `on-defend(ctx)` | 玩家穿着附魔护甲被攻击 | `true` = 已生效 |
-| `on-mining(ctx)` | 玩家用附魔工具挖掘方块 | `true` = 已生效 |
-| `on-kill(ctx)` | 玩家用附魔武器击杀实体 | `true` = 已生效 |
+| `on-attack(ctx)` | 用附魔武器攻击实体 | `true` = 已生效 |
+| `on-defend(ctx)` | 穿着附魔护甲被攻击 | `true` = 已生效 |
+| `on-mining(ctx)` | 用附魔工具挖掘方块 | `true` = 已生效 |
+| `on-kill(ctx)` | 用附魔武器击杀实体 | `true` = 已生效 |
 | `on-passive(ctx)` | 被动触发（按 `period` 周期） | `true` = 已生效 |
+| `on-shoot(ctx)` | 用附魔弓射箭 | `true` = 已生效 |
+| `on-launch(ctx)` | 投掷附魔三叉戟 | `true` = 已生效 |
+| `on-hit(ctx)` | 箭/三叉戟命中方块或实体 | 无（`ctx.projectile` 为投射物） |
+| `on-projectile-damage(ctx)` | 箭/三叉戟造成伤害 | 无（`ctx.victim` 为受击者） |
+| `on-drop(ctx)` | 方块掉落物生成（时运/精准采集后） | `true` = 已生效 |
+| `on-interact(ctx)` | 与方块交互 / 左击方块 | `true` = 已生效 |
+| `on-fishing(ctx)` | 钓鱼状态变化 | `true` = 已生效 |
+| `on-inventory-death(ctx)` | 玩家死亡掉落物品 | `true` = 已生效 |
+| `on-click(ctx)` | 在容器界面点击 | `true` = 已生效 |
+| `on-item-damage(ctx)` | 物品耐久减少 | `true` = 已生效 |
+| `on-protection(ctx)` | 受到伤害（可改伤害减免） | `true` = 已生效 |
+| `on-death(ctx)` | 实体死亡（附魔持有者） | `true` = 已生效 |
+| `on-resurrect(ctx)` | 不死图腾触发 | `true` = 已生效 |
+| `on-block-change(ctx)` | 实体改变方块（踩踏等） | `true` = 已生效 |
+| `on-move(ctx)` | 玩家移动 | `true` = 已生效 |
+| `on-place(ctx)` | 放置附魔方块 | 无 |
 
 ### 上下文对象 `ctx`
 
@@ -96,9 +116,41 @@ def on-attack(ctx) {
 | `ctx.drop(item)` | 在 `actor` 处掉落物品 |
 | `ctx.random(min, max)` | 随机整数 |
 | `ctx.visualEffects()` | 是否开启了视觉特效 |
+| `ctx.effectArrow(arrow)` | 给箭矢附加 `potion-effect` 组件 |
+| `ctx.mod(map[, level])` | 计算脚本中声明的 `[base: .., per-level: .., capacity: ..]` 数值 |
+| `ctx.asInt(x)` / `ctx.asFloat(x)` | 数值类型转换 |
+| `ctx.charges()` / `ctx.consumeCharge()` / `ctx.outOfCharges()` | 充能系统 |
+| `ctx.give(item)` / `ctx.giveTo(player, item)` / `ctx.hasSpace(player, item)` | 给予物品 |
+| `ctx.breakBlock(block)` | 以"忙碌状态"破坏方块（不会再次触发附魔） |
+| `ctx.explodeBlocks(block, power)` | 生成挖掘爆炸（不伤害实体） |
+| `ctx.explode(location, power, fire, blocks, items)` | 生成可配置爆炸 |
+| `ctx.explodeLivingOnly(location, power, effects)` | 只伤害生物的爆炸 |
+| `ctx.cook(item)` / `ctx.smelt(item)` / `ctx.isCookable(item)` | 烧炼结果 |
+| `ctx.addDrop(item)` | 向当前方块掉落事件追加掉落物 |
+| `ctx.autoReel()` | 自动收杆 |
+| `ctx.spawn(type, location)` / `ctx.entityType(name)` | 生成实体 |
+| `ctx.launchProjectile(type)` | 发射投射物（如 `ENDER_PEARL`） |
+| `ctx.material(name)` / `ctx.item(name)` / `ctx.itemOf(material)` | 材质/物品构造 |
+| `ctx.face(name)` / `ctx.faces("UP,DOWN,...")` | 方块朝向常量 |
+| `ctx.isLog(type)` / `ctx.isLeaves(type)` | 原木/树叶判断 |
+| `ctx.maxHealth(entity)` | 实体最大生命值 |
+| `ctx.disablePickup(arrow)` | 禁止拾取箭矢 |
+| `ctx.setBlockLater(block, material)` | 下一 tick 替换方块 |
+| `ctx.addTickedBlock(block, from, to, life)` | 定时恢复方块（火焰行者） |
+| `ctx.formBlock(block, material)` | 触发方块形成事件并应用 |
+| `ctx.removeAllEnchants(item)` | 清除物品所有附魔 |
+| `ctx.skullItem(material, texture, name, owner)` / `ctx.headMaterial(type)` | 头颅物品 |
+| `ctx.isMythicMob(e)` / `ctx.spawnReason(e)` / `ctx.spawnEgg(type)` | MythicMobs / 生成信息 |
+| `ctx.setPdcString(item, key, value)` / `ctx.getPdcString(item, key)` | 持久化数据 |
+| `ctx.delayVelocity(entity, factor)` | 下一 tick 修改速度 |
+| `ctx.lastTwoTargetBlocks(distance)` | 准星路径上的方块 |
 
 > 脚本运行在**开启反射访问**的编译上下文中，因此也可以直接访问 Bukkit 对象的任意方法：
 > `&ctx.victim.setFireTicks(100)`、`&ctx.player.getInventory().addItem(...)` 等。
+
+> ⚠️ 插件类会被 shade 重定位，因此脚本中**不要**直接引用 `su.nightexpress.*` 的类名；
+> 枚举/常量请使用上表提供的辅助方法（如 `ctx.face("UP")`、`ctx.material("LAVA")`），
+> 或直接比较 `.name()` 字符串。类型判断（`is org.bukkit.entity.Player`）不受影响。
 
 ## 自定义附魔示例
 

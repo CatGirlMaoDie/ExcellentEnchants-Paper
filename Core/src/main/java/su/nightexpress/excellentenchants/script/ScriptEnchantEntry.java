@@ -125,7 +125,18 @@ public class ScriptEnchantEntry implements EnchantCatalogEntry {
                                                @NonNull EnchantManager manager,
                                                @NonNull Path file,
                                                @NonNull EnchantContext context) {
-        return new ScriptEnchantment(plugin, manager, file, context, this.script);
+        EnchantScript script = this.script;
+
+        if (script.hasHandler(ScriptEnchantment.HOOK_LAUNCH) || script.hasHandler("projectile:trident")) {
+            return new ScriptTridentEnchantment(plugin, manager, file, context, script);
+        }
+
+        if (script.hasHandler(ScriptEnchantment.HOOK_HIT) || script.hasHandler(
+            ScriptEnchantment.HOOK_PROJECTILE_DAMAGE)) {
+            return new ScriptArrowEnchantment(plugin, manager, file, context, script);
+        }
+
+        return new ScriptEnchantment(plugin, manager, file, context, script);
     }
 
     @Override
