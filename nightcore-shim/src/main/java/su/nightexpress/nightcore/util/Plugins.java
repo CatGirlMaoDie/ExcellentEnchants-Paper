@@ -1,0 +1,83 @@
+package su.nightexpress.nightcore.util;
+
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.jspecify.annotations.NonNull;
+import su.nightexpress.nightcore.integration.placeholder.PAPI;
+
+public class Plugins {
+
+    @Deprecated
+    public static final String VAULT          = "Vault";
+    @Deprecated
+    public static final String LUCK_PERMS     = "LuckPerms";
+    @Deprecated
+    public static final String ECONOMY_BRIDGE = "EconomyBridge";
+
+    @Deprecated
+    public static final String PLACEHOLDER_API = "PlaceholderAPI";
+    public static final String FLOODGATE       = "floodgate";
+
+    private static boolean hasFloodgate;
+
+    public static void detectPlugins() {
+        hasFloodgate = isInstalled(FLOODGATE);
+    }
+
+    @NonNull
+    @Deprecated
+    public static Plugin getCore() {
+        return Bukkit.getPluginManager().getPlugin("nightcore");
+    }
+
+    public static boolean isInstalled(@NonNull String pluginName) {
+        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        return plugin != null;
+    }
+
+    public static void ifInstalled(@NonNull String pluginName, Runnable action) {
+        if (isInstalled(pluginName)) {
+            action.run();
+        }
+    }
+
+    public static boolean isLoaded(@NonNull String pluginName) {
+        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        return plugin != null && plugin.isEnabled();
+    }
+
+    @NonNull
+    @Deprecated
+    public static Object getPermissionProvider() {
+        return null;
+    }
+
+    @Deprecated
+    public static boolean hasPermissionsProvider() {
+        return false;
+    }
+
+    @Deprecated
+    public static boolean isSpigot() {
+        return Version.isSpigot();
+    }
+
+    @Deprecated
+    public static boolean hasPlaceholderAPI() {
+        return PAPI.isPresent();
+    }
+
+    @Deprecated
+    public static boolean hasVault() {
+        return isInstalled(VAULT);
+    }
+
+    public static boolean hasFloodgate() {
+        return hasFloodgate;
+    }
+
+    @Deprecated
+    public static boolean hasEconomyBridge() {
+        return isInstalled(ECONOMY_BRIDGE);
+    }
+}

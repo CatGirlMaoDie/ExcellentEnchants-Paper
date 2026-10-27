@@ -4,16 +4,8 @@ name: ExcellentEnchants
 version: '${project.version}'
 description: A lot of new enchantments properly integrated into the server!
 api-version: '1.21'
-#loader: io.papermc.testplugin.TestPluginLoader
 dependencies:
-  bootstrap:
-    nightcore:
-      load: BEFORE
-      required: true
   server:
-    nightcore:
-      load: BEFORE
-      required: true
     ProtocolLib:
       load: BEFORE
       required: false
@@ -21,6 +13,8 @@ dependencies:
       load: BEFORE
       required: false
     PlaceholderAPI:
+      load: BEFORE
       required: false
     MythicMobs:
+      load: BEFORE
       required: false

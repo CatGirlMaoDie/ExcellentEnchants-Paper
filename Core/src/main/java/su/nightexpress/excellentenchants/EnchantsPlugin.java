@@ -2,7 +2,6 @@ package su.nightexpress.excellentenchants;
 
 
 import org.jspecify.annotations.Nullable;
-import su.nightexpress.excellentenchants.bridge.spigot.SpigotEnchantsBootstrap;
 import su.nightexpress.excellentenchants.command.BaseCommands;
 import su.nightexpress.excellentenchants.config.Config;
 import su.nightexpress.excellentenchants.config.Lang;
@@ -14,7 +13,6 @@ import su.nightexpress.nightcore.NightPlugin;
 import su.nightexpress.nightcore.commands.command.NightCommand;
 import su.nightexpress.nightcore.config.PluginDetails;
 import su.nightexpress.nightcore.util.Plugins;
-import su.nightexpress.nightcore.util.Version;
 
 public class EnchantsPlugin extends NightPlugin {
 
@@ -45,10 +43,6 @@ public class EnchantsPlugin extends NightPlugin {
         super.onStartup();
 
         EnchantsAPI.load(this);
-
-        if (Version.isSpigot()) {
-            new SpigotEnchantsBootstrap().bootstrap(this);
-        }
     }
 
     @Override

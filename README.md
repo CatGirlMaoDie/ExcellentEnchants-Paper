@@ -73,6 +73,31 @@
 - [**Enchant Charges**](https://nightexpressdev.com/excellentenchants/features/charges/). Introduce charge-based mechanics for enchantments.
 - [**New Curses**](https://nightexpressdev.com/excellentenchants/enchantments/list/). Additional curse enchantments beyond vanilla.
 
+## Building
+
+The project is a multi-module Maven build:
+
+```
+mvn clean package
+```
+
+The API version is defined by the `paper.api.version` property in the root `pom.xml` (default `26.1.2.build.51-beta`, which requires **JDK 25**).
+To build against a Java 21 compatible Paper API, override the property:
+
+```
+mvn clean package -Dpaper.api.version=1.21.11-R0.1-SNAPSHOT
+```
+
+### Module layout
+
+| Module | Description |
+|:--|:--|
+| `nightcore-shim` | The engine sources (configuration, language, command framework, GUI framework, text/particle helpers) previously shipped by the *NightCore* library, bundled and adapted to the native Paper API. |
+| `API` | Public API of the plugin. |
+| `Core` | The plugin implementation; shades the engine into `su.nightexpress.excellentenchants.libs.nightcore`. |
+| `tooltip-packetevents` / `tooltip-protocollib` | Optional tooltip providers. |
+| `compat-mythicmobs` | Optional MythicMobs compatibility. |
+
 ## Requirements
 
 You **must** have [NightCore](https://nightexpressdev.com/nightcore/) plugin installed to run **ExcellentEnchants**. Minecraft 26.1.2 support requires NightCore 2.15.2 or newer.
