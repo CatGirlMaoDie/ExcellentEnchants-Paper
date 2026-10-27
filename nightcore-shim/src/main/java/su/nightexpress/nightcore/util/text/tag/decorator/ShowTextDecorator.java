@@ -29,7 +29,6 @@ public class ShowTextDecorator implements Decorator {
     //        BaseComponent component = NightMessage.parse(fused);
     //
     //        Text text;
-    //        if (Version.isAtLeast(Version.MC_1_20_6)) {
     //            text = new Text(component);
     //        }
     //        else {

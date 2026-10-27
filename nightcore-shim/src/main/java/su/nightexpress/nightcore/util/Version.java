@@ -8,65 +8,113 @@ import java.util.stream.Stream;
 
 public enum Version {
 
-    @Deprecated V1_19_R3("1.19.4", 3337, Status.DROPPED),
-    @Deprecated V1_20_R1("1.20.1", 3465, Status.DROPPED),
-    @Deprecated V1_20_R2("1.20.2", 3578, Status.DROPPED),
-    @Deprecated V1_20_R3("1.20.4", 3700, Status.DROPPED),
-    @Deprecated MC_1_20_6("1.20.6", 3839, Status.DROPPED),
-    @Deprecated MC_1_21_0("1.21", 3953, Status.DROPPED),
-    @Deprecated MC_1_21("1.21.1", 3955, Status.DROPPED),
-    @Deprecated MC_1_21_2("1.21.2", 4080, Status.DROPPED),
-    @Deprecated MC_1_21_3("1.21.3", 4082, Status.DROPPED),
-    @Deprecated MC_1_21_4("1.21.4", 4189, Status.DROPPED),
-    @Deprecated MC_1_21_5("1.21.5", 4325, Status.DROPPED),
-    @Deprecated MC_1_21_6("1.21.6", 4435, Status.DROPPED),
-    @Deprecated MC_1_21_7("1.21.7", 4438, Status.DROPPED),
+    // --- Supported range: Minecraft 1.21 - 26.3 -------------------------------------------------
+    MC_1_21_0("1.21", 3953),
+    MC_1_21("1.21.1", 3955),
+    MC_1_21_2("1.21.2", 4080),
+    MC_1_21_3("1.21.3", 4082),
+    MC_1_21_4("1.21.4", 4189),
+    MC_1_21_5("1.21.5", 4325),
+    MC_1_21_6("1.21.6", 4435),
+    MC_1_21_7("1.21.7", 4438),
     MC_1_21_8("1.21.8", 4440),
-    MC_1_21_9("1.21.9", 4554, Status.OUTDATED),
-    MC_1_21_10("1.21.10", 4556, Status.OUTDATED),
+    MC_1_21_9("1.21.9", 4554),
+    MC_1_21_10("1.21.10", 4556),
     MC_1_21_11("1.21.11", 4671),
-    MC_26_1("26.1", 4786, Status.DROPPED),
+    MC_26_1("26.1", 4786),
     MC_26_1_1("26.1.1", 4788),
     MC_26_1_2("26.1.2", 4790),
     MC_26_2("26.2", 4903),
     MC_26_3("26.3", 5023),
-    MC_26_4("26.4", 5119),
+
+    /**
+     * Server versions outside of the supported range (older than 1.21 or newer than 26.3).
+     */
     UNKNOWN("Unknown", 10_000),
     ;
+
+    /**
+     * The oldest server version supported by the plugin.
+     */
+    public static final Version MIN_SUPPORTED = MC_1_21_0;
+
+    /**
+     * The newest server version supported by the plugin.
+     */
+    public static final Version MAX_SUPPORTED = MC_26_3;
 
     private static final boolean IS_PAPER = checkPaper();
     private static final boolean IS_FOLIA = checkFolia();
 
     private static Version current;
-    private final Status   status;
+    private static String  rawVersion = "0";
     private final int      dataVersion;
     private final String   localized;
 
     Version(@NonNull String localized, int dataVersion) {
-        this(localized, dataVersion, Status.SUPPORTED);
-    }
-
-    Version(@NonNull String localized, int dataVersion, @NonNull Status status) {
         this.localized = localized;
         this.dataVersion = dataVersion;
-        this.status = status;
-    }
-
-    public enum Status {
-        SUPPORTED,
-        OUTDATED,
-        DROPPED
     }
 
     @NonNull
     public static Version detect() {
         String bukkitVersion = isSpigot() ? Bukkit.getServer().getBukkitVersion() : Bukkit.getServer().getVersion();
         String exact = bukkitVersion.split("-")[0];
+        rawVersion = exact;
 
         current = Stream.of(values()).sorted(Comparator.reverseOrder()).filter(version -> exact.equalsIgnoreCase(version
             .getLocalized())).findFirst().orElse(UNKNOWN);
 
         return current;
+    }
+
+    /**
+     * Raw server version string as reported by the server (e.g. {@code 1.21.8}).
+     */
+    @NonNull
+    public static String getRawVersion() {
+        return rawVersion;
+    }
+
+    /**
+     * Whether the server is running a version older than {@link #MIN_SUPPORTED}.
+     */
+    public static boolean isBelowMinimum() {
+        return compare(rawVersion, MIN_SUPPORTED.getLocalized()) < 0;
+    }
+
+    /**
+     * Whether the server is running a version newer than {@link #MAX_SUPPORTED}.
+     */
+    public static boolean isAboveMaximum() {
+        return compare(rawVersion, MAX_SUPPORTED.getLocalized()) > 0;
+    }
+
+    /**
+     * Compares two dot separated version strings numerically (e.g. {@code 1.21.8} with {@code 26.3}).
+     */
+    public static int compare(@NonNull String first, @NonNull String second) {
+        String[] left = first.split("\\.");
+        String[] right = second.split("\\.");
+        int length = Math.max(left.length, right.length);
+
+        for (int index = 0; index < length; index++) {
+            int a = index < left.length ? toInt(left[index], 0) : 0;
+            int b = index < right.length ? toInt(right[index], 0) : 0;
+
+            if (a != b) return Integer.compare(a, b);
+        }
+
+        return 0;
+    }
+
+    private static int toInt(@NonNull String value, int def) {
+        try {
+            return Integer.parseInt(value.trim());
+        }
+        catch (NumberFormatException exception) {
+            return def;
+        }
     }
 
     @NonNull
@@ -97,21 +145,11 @@ public enum Version {
         return IS_FOLIA;
     }
 
-    public boolean isDeprecated() {
-        return this.status == Status.OUTDATED;
-    }
-
-    public boolean isDropped() {
-        return this.status == Status.DROPPED;
-    }
-
-    public boolean isSupported() {
-        return this.status == Status.SUPPORTED;
-    }
-
-    @NonNull
-    public Status getStatus() {
-        return this.status;
+    /**
+     * Whether this entry is a known (detected) server version.
+     */
+    public boolean isKnown() {
+        return this != UNKNOWN;
     }
 
     public int getDataVersion() {

@@ -128,18 +128,22 @@ def on-attack(ctx) {
 
 ## Requirements
 
-You **must** have [NightCore](https://nightexpressdev.com/nightcore/) plugin installed to run **ExcellentEnchants**. Minecraft 26.1.2 support requires NightCore 2.15.2 or newer.
+**ExcellentEnchants** is a standalone **Paper** plugin. It does **not** require any additional plugin to be installed on your server: the engine code that used to live in the external *NightCore* library is now bundled inside the plugin itself and implemented on top of the native Paper API.
 
-The following versions and platforms are supported:
+**Supported range: Minecraft 1.21 - 26.3.**
 
-| **Server Version** | **Paper** | **Spigot** | **Folia** | **Java Version** |
-|:------------------:|:---------:|:----------:|:---------:|:----------------:|
-|       26.1.2       |    Yes    |    Yes     |    No     |        25        |
-|      1.21.11       |    Yes    |    Yes     |    No     |        21        |
-|      1.21.10       |    Yes    |    Yes     |    No     |        21        |
-|       1.21.9       |    Yes    |     No     |    No     |        21        |
-|       1.21.8       |    Yes    |    Yes     |    No     |        21        |
+| **Server Version** | **Paper** | **Folia** | **Java Version** |
+|:------------------:|:---------:|:---------:|:----------------:|
+|       26.3         |    Yes    |    No     |        25        |
+|       26.2         |    Yes    |    No     |        25        |
+|      26.1.x        |    Yes    |    No     |        25        |
+|      1.21.11       |    Yes    |    No     |        21        |
+|    1.21.9 - 1.21.10|    Yes    |    No     |        21        |
+|      1.21.8        |    Yes    |    No     |        21        |
+|   1.21 - 1.21.7    |    Yes    |    No     |        21        |
 
+- **Older versions (1.20.x and below) are no longer supported.** The plugin will refuse to start on them and disable itself.
+- Versions newer than **26.3** are loaded in "best effort" mode: the plugin enables, but some features may not work properly.
 - Anything not listed in the compatibility table is **NOT** supported.
 - Make sure to check out all known issues and incompatibilities [here](https://nightexpressdev.com/excellentenchants/common-issues/).
 

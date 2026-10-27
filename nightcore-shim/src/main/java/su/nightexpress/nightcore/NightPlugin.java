@@ -78,6 +78,9 @@ public abstract class NightPlugin extends JavaPlugin implements NightCorePlugin 
 
     @Override
     public void onEnable() {
+        // Server version must be known before anything else (also used by the supported range check).
+        Version.detect();
+
         // Command argument & codec registries must be available before any config/language is read.
         Arguments.init(new ArgumentRegistry());
         ConfigCodecs.init(new CodecRegistry());
@@ -404,22 +407,28 @@ public abstract class NightPlugin extends JavaPlugin implements NightCorePlugin 
     }
 
     private boolean checkVersion() {
-        Version current = Version.getCurrent();
-        if (current != Version.UNKNOWN && current.isSupported()) return true;
+        String raw = Version.getRawVersion();
 
-        this.warn("=".repeat(35));
-
-        if (current == Version.UNKNOWN) {
-            this.warn("WARNING: This plugin is not supposed to run on this server version!");
-            this.warn("The plugin may not work properly.");
+        // Versions below 1.21 are not supported at all - refuse to start.
+        if (Version.isBelowMinimum()) {
+            this.error("=".repeat(50));
+            this.error("This plugin requires Minecraft " + Version.MIN_SUPPORTED.getLocalized() + " or newer!");
+            this.error("Detected server version: " + raw);
+            this.error("Disabling the plugin.");
+            this.error("=".repeat(50));
+            return false;
         }
-        else if (current.isDropped()) {
-            this.error("ERROR: You're running an unsupported server version (" + current.getLocalized() + ")!");
+
+        // Versions newer than the newest supported one run in a "best effort" mode.
+        if (Version.isAboveMaximum()) {
+            this.warn("=".repeat(50));
+            this.warn("This server version (" + raw + ") is newer than the latest supported one ("
+                + Version.MAX_SUPPORTED.getLocalized() + ").");
+            this.warn("The plugin will be enabled, but some features may not work properly.");
+            this.warn("=".repeat(50));
         }
 
-        this.warn("=".repeat(35));
-
-        return !current.isDropped();
+        return true;
     }
 
     public PermissionNamespace getCorePermissions() {

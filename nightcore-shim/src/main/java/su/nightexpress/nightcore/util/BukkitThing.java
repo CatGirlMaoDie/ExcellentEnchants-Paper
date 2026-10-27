@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
@@ -135,9 +134,6 @@ public class BukkitThing {
     @NonNull
     @Deprecated
     public static <T extends Keyed> List<String> getNames(@NonNull Registry<@NonNull T> registry) {
-        if (Version.isBehind(Version.V1_20_R2)) {
-            return StreamSupport.stream(registry.spliterator(), false).map(BukkitThing::toString).toList();
-        }
         return registry.stream().map(BukkitThing::toString).toList();
     }
 
