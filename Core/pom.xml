@@ -72,6 +72,12 @@
             <artifactId>API</artifactId>
             <version>5.4.3</version>
         </dependency>
+<!-- Bundled engine: internal module (previously the external NightCore plugin). -->
+        <dependency>
+            <groupId>su.nightexpress.excellentenchants</groupId>
+            <artifactId>nightcore-shim</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>su.nightexpress.excellentenchants</groupId>
@@ -117,20 +123,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <!-- Java 16 Fix -->
-                <dependencies>
-                    <dependency>
-                        <groupId>org.ow2.asm</groupId>
-                        <artifactId>asm</artifactId>
-                        <version>9.2</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.ow2.asm</groupId>
-                        <artifactId>asm-commons</artifactId>
-                        <version>9.2</version>
-                    </dependency>
-                </dependencies>
+                <version>3.5.3</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
