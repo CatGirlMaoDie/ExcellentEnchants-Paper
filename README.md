@@ -153,6 +153,10 @@ def on-attack(ctx) {
 - [PacketEvents](https://spigotmc.org/resources/80279/) - For enchantment descriptions in item tooltip (you need only one).
 - [ProtocolLib](https://ci.dmulloy2.net/job/ProtocolLib/) - For enchantment descriptions in item tooltip (you need only one).
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for the list of changes of this fork (Paper native rewrite, Fluxon scripting, Folia support, ...).
+
 ## License
 
 This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)** - see the [LICENSE](LICENSE) file for the full text.
