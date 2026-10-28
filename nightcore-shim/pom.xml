@@ -6,7 +6,7 @@
     <parent>
         <groupId>su.nightexpress.excellentenchants</groupId>
         <artifactId>ExcellentEnchants</artifactId>
-        <version>5.4.3</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>nightcore-shim</artifactId>

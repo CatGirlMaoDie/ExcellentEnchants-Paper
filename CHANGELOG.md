@@ -1,11 +1,11 @@
 # 更新日志 / Changelog
 
 本项目是 [ExcellentEnchants](https://github.com/nulli0n/ExcellentEnchants-spigot)（NightExpress，GPL-3.0）的 Paper 原生重构版。
-所有变更均以 **ExcellentEnchants-Paper** 自身的版本号发布，第一个公开版本为 `5.4.3`。
+所有变更均以 **ExcellentEnchants-Paper** 自身的版本号发布，第一个公开版本为 `1.0.0`。
 
 ---
 
-## v5.4.3 · 首个公开版本
+## v1.0.0 · 首个公开版本
 
 首个可运行版本：在 Paper 1.21.11 上完成全流程验证（81 个附魔加载、数据目录生成、零 ERROR）。
 
