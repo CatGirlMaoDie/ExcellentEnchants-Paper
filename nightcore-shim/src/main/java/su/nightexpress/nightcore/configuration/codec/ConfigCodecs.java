@@ -51,16 +51,22 @@ public class ConfigCodecs {
     }
 
     public static void init(CodecRegistry registry) {
-        if (ConfigCodecs.registry != null) throw new IllegalStateException("Registry is already initialized!");
-
         ConfigCodecs.registry = registry;
     }
 
+    /**
+     * Returns the codec registry, creating a default one on demand.
+     * <p>
+     * The registry can be requested before the plugin's {@code onEnable()} (e.g. from a Paper bootstrapper
+     * that loads configs and enchantment scripts), so it must never fail with a hard error.
+     */
     public static CodecRegistry registry() {
-        if (registry == null) {
-            throw new IllegalStateException("ConfigCodecs is not initialized yet! Is NightCore loaded?");
+        CodecRegistry current = registry;
+        if (current == null) {
+            current = new CodecRegistry();
+            registry = current;
         }
-        return registry;
+        return current;
     }
 
     public static <T> void register(Class<T> type, ConfigCodec<T> codec) {

@@ -60,6 +60,10 @@ public interface Software {
         }
 
 
+        public boolean isLoaded() {
+            return this.software != null;
+        }
+
         public Software get() {
             if (this.software == null) throw new IllegalStateException("Software is not yet initialized!");
 
@@ -76,6 +80,18 @@ public interface Software {
 
     static Software get() {
         return INSTANCE.get();
+    }
+
+    /**
+     * Initializes the bundled Paper software bridge when it is not initialized yet.
+     * <p>
+     * Safe to call multiple times and from a Paper bootstrapper (before {@code onEnable()}),
+     * because config and item utilities may be used as soon as the bootstrapper runs.
+     */
+    static void loadDefault() {
+        if (INSTANCE.isLoaded()) return;
+
+        INSTANCE.load(new su.nightexpress.nightcore.bridge.paper.PaperBridge());
     }
 
     boolean initialize();

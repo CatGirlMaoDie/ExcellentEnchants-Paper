@@ -44,6 +44,7 @@ import su.nightexpress.nightcore.util.FileUtil;
 import su.nightexpress.nightcore.util.LowerCase;
 import su.nightexpress.nightcore.util.Reflex;
 import su.nightexpress.nightcore.util.Version;
+import su.nightexpress.nightcore.util.bridge.Software;
 import su.nightexpress.nightcore.util.wrapper.UniPermission;
 
 /**
@@ -81,6 +82,9 @@ public abstract class NightPlugin extends JavaPlugin implements NightCorePlugin 
     public void onEnable() {
         // Server version must be known before anything else (also used by the supported range check).
         Version.detect();
+
+        // Server software bridge (Bukkit/Paper abstraction), required by config and item utilities.
+        Software.loadDefault();
 
         // Command argument & codec registries must be available before any config/language is read.
         Arguments.init(new ArgumentRegistry());

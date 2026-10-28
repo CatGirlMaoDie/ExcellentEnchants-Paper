@@ -58,6 +58,9 @@ public class PaperEnchantsBootstrap implements PluginBootstrap {
 
     @Override
     public void bootstrap(BootstrapContext context) {
+        // Note: the engine bridge and version detection are initialized in EnchantsPlugin#onEnable,
+        // because the server instance does not exist yet while the bootstrapper runs.
+
         Path dataDirectory = context.getDataDirectory();
 
         DistributionConfig distributionConfig = DistributionConfig.load(dataDirectory);

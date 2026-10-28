@@ -74,8 +74,9 @@ public class TooltipManager extends AbstractManager<EnchantsPlugin> implements T
         }
 
         if (this.handler == null) {
-            this.plugin.error(
-                "No compatible enchantment tooltip provider found. Please install one of the following plugins for the feature to work: [%s]"
+            // Tooltips are an optional feature: keep this non-fatal.
+            this.plugin.warn(
+                "No compatible enchantment tooltip provider found. Install one of the following plugins to enable enchantment descriptions in item tooltips: [%s]"
                     .formatted(String.join(", ", this.factoryMap.keySet()))
             );
         }

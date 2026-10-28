@@ -150,7 +150,7 @@
 plugins/ExcellentEnchants/
 ├── config.yml              # 主配置：附魔台/交易/战利品/钓鱼/充能/Tooltip 等开关
 ├── lang/
-│   ├── messages_cn.yml     # 简体中文（已内置）
+│   ├── lang_zh.yml     # 简体中文（已内置）
 │   ├── messages_en.yml     # 英文
 │   └── ...                 # 日文 / 西班牙文 / 波兰文 / 葡萄牙文
 └── enchants/

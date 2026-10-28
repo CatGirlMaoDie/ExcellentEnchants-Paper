@@ -58,6 +58,13 @@ public enum Version {
 
     @NonNull
     public static Version detect() {
+        // The server instance does not exist while a Paper bootstrapper runs.
+        if (Bukkit.getServer() == null) {
+            current = UNKNOWN;
+            rawVersion = "";
+            return current;
+        }
+
         String bukkitVersion = isSpigot() ? Bukkit.getServer().getBukkitVersion() : Bukkit.getServer().getVersion();
         String exact = bukkitVersion.split("-")[0];
         rawVersion = exact;
@@ -80,6 +87,8 @@ public enum Version {
      * Whether the server is running a version older than {@link #MIN_SUPPORTED}.
      */
     public static boolean isBelowMinimum() {
+        if (rawVersion.isEmpty()) return false; // Not detected yet.
+
         return compare(rawVersion, MIN_SUPPORTED.getLocalized()) < 0;
     }
 
@@ -87,6 +96,8 @@ public enum Version {
      * Whether the server is running a version newer than {@link #MAX_SUPPORTED}.
      */
     public static boolean isAboveMaximum() {
+        if (rawVersion.isEmpty()) return false; // Not detected yet.
+
         return compare(rawVersion, MAX_SUPPORTED.getLocalized()) > 0;
     }
 

@@ -23,16 +23,20 @@ public class Arguments {
     private static ArgumentRegistry registry;
 
     public static void init(ArgumentRegistry registry) {
-        if (Arguments.registry != null) throw new IllegalStateException("Registry is already initialized!");
-
         Arguments.registry = registry;
     }
 
+    /**
+     * Returns the argument registry, creating a default one on demand (it may be requested by a
+     * Paper bootstrapper before the plugin is enabled).
+     */
     public static ArgumentRegistry registry() {
-        if (registry == null) {
-            throw new IllegalStateException("ArgumentTypes is not initialized yet! Is NightCore loaded?");
+        ArgumentRegistry current = registry;
+        if (current == null) {
+            current = new ArgumentRegistry();
+            registry = current;
         }
-        return registry;
+        return current;
     }
 
     public static <T> void register(Class<T> type, ArgumentType<T> codec) {
