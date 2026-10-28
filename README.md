@@ -153,9 +153,17 @@ def on-attack(ctx) {
 - [PacketEvents](https://spigotmc.org/resources/80279/) - For enchantment descriptions in item tooltip (you need only one).
 - [ProtocolLib](https://ci.dmulloy2.net/job/ProtocolLib/) - For enchantment descriptions in item tooltip (you need only one).
 
+## License
+
+This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)** - see the [LICENSE](LICENSE) file for the full text.
+
+It is a derivative work of [ExcellentEnchants](https://github.com/nulli0n/ExcellentEnchants-spigot) by
+[NightExpress](https://nightexpressdev.com/), which is also licensed under GPL-3.0. Because the license is
+copyleft, any modified or redistributed version must stay under GPL-3.0 and ship its source code.
+
 ## Links
 - [**Website**](https://nightexpressdev.com/) - Check out my other plugins.
 - [**Wiki**](https://nightexpressdev.com/excellentenchants/) - Learn how to configure the plugin.
 - [**Discord**](https://discord.gg/EwNFGsnGaW) - Get support, ask questions.
-- [**Github**](https://github.com/nulli0n/ExcellentEnchants-spigot) - Check out the source code.
+- [**Github**](https://github.com/CatGirlMaoDie/ExcellentEnchants-Paper) - Check out the source code.
 - [**Donate**](https://ko-fi.com/nightexpress) - Support me and my work.
